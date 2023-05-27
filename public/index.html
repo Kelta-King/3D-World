@@ -14,76 +14,10 @@
 
 <body>
     <canvas id="renderCanvas"></canvas>
-
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script>
-        function myObj(scene) {
-
-            var planeOpts = {
-                height: 5.4762,
-                width: 7.3967,
-                sideOrientation: BABYLON.Mesh.DOUBLESIDE
-            };
-            var ANote0Video = BABYLON.MeshBuilder.CreatePlane("plane", planeOpts, scene);
-            var vidPos = (new BABYLON.Vector3(10, 0, 1))
-            ANote0Video.position = vidPos;
-            var ANote0VideoMat = new BABYLON.StandardMaterial("m", scene);
-            var ANote0VideoVidTex = new BABYLON.VideoTexture("vidtex", "https://playground.babylonjs.com/textures/babylonjs.webm", scene);
-            ANote0VideoMat.diffuseTexture = ANote0VideoVidTex;
-            ANote0VideoMat.roughness = 1;
-            ANote0VideoMat.emissiveColor = new BABYLON.Color3.White();
-            ANote0Video.material = ANote0VideoMat;
-            
-            // Create the object
-            // var obj = new BABYLON.Mesh.CreatePlane('myBox', 1, scene); // Create your Babylon.js object here
-
-            // Create an observable for receiving messages
-            ANote0Video.messageObservable = new BABYLON.Observable();
-
-            // Function to send a message to the object
-            ANote0Video.sendMessage = function (message) {
-                // Notify the observers
-                ANote0Video.messageObservable.notifyObservers(message);
-            };
-
-            // Subscribe to the message observable
-            ANote0Video.messageObservable.add(function (message) {
-                console.log(ANote0VideoVidTex.video.src);
-                console.log('Received message:', message);
-                ANote0VideoVidTex.updateURL(message);
-                ANote0VideoVidTex.video.play();
-            });
-
-            return ANote0Video;
-        }
-
-        window.addEventListener('DOMContentLoaded', function () {
-            // Create Babylon.js scene and engine
-            var canvas = document.getElementById('renderCanvas');
-            var engine = new BABYLON.Engine(canvas, true);
-            var scene = new BABYLON.Scene(engine);
-
-            // Create a camera
-            var camera = new BABYLON.ArcRotateCamera("arcR", -Math.PI / 2, Math.PI / 2, 15, BABYLON.Vector3.Zero(), scene);
-            // camera.setTarget(BABYLON.Vector3.Zero());
-            camera.attachControl(canvas, true);
-
-            // Create light
-            var light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
-
-            // Create the object
-            var myObject = myObj(scene);
-
-            // Send a message to the object
-            setTimeout(() => {
-                myObject.sendMessage("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4");
-            }, 3000);
-            
-            engine.runRenderLoop(function () {
-                scene.render();
-            });
-        });
-    </script>
+    <script src="Js/VSDO.js"></script>
+    <script src="Js/scheduler.js"></script>
+    <script src="Js/app.js"></script>
 </body>
 
 </html>

@@ -25,26 +25,35 @@ class VirtualSignage {
         // Function to send a message to the object
         this.display.sendMessage = function (message) {
             // Notify the observers
-            this.display.messageObservable.notifyObservers(message);
+            // console.log(this.display);
+            // this.display.messageObservable.notifyObservers(message);
         };
 
         // Subscribe to the message observable
-        this.display.messageObservable.add(function (message) {
+        this.display.messageObservable.add((message) => {
             console.log('Received message:', message);
+            this.display.material.diffuseTexture.video.pause();
+            this.display.material.diffuseTexture.video.src = message;
+            this.display.material.diffuseTexture.video.play();
         });
     }
 
-    getDisplay(){
+    getDisplay = () => {
         return this.display;
     }
 
-    setPosition(x = 0, y = 0, z = 0){
+    setPosition = (x = 0, y = 0, z = 0) => {
         var vidPos = (new BABYLON.Vector3(x, y, z))
         this.display.position = vidPos;
     }
 
-    getPosition(){
+    getPosition = () => {
         return this.display.position;
+    }
+
+    sendMessage = (message) => {
+        // this.display.sendMessage(message);
+        this.display.messageObservable.notifyObservers(message);
     }
 }
 
@@ -62,12 +71,6 @@ class VirtualSignageLandScape extends VirtualSignage {
 
 class VirtualPortraitSignage extends VirtualSignage {
     constructor(scene) {
-        var planeOpts = {
-            height: 16 / 2,
-            width: 9 / 2,
-            sideOrientation: BABYLON.Mesh.DOUBLESIDE,
-        };
-        this.display = BABYLON.MeshBuilder.CreatePlane("plane", planeOpts, scene);
         // Provide video with proper orientation. 9:16 works
         super(
             scene,
