@@ -11,6 +11,8 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Create light
     var light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
+
+    
     var scheduler = new Scheduler("http://localhost:8000/getAvailableFiles");
 
     // Create the object
