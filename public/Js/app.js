@@ -11,24 +11,31 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Create light
     var light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene);
-
-    // Create the object
-    var myObject = new VirtualSignageLandScape(scene);
     var scheduler = new Scheduler("http://localhost:8000/getAvailableFiles");
 
+    // Create the object
+    var myObject1 = new VirtualSignageLandScape(scene);
+    myObject1.setPosition(5);
+
+    // Create the object
+    var myObject2 = new VirtualSignageLandScape(scene);
+    myObject2.setPosition(-5);
+
     // Send a message to the object
-    myObject.sendMessage("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4");
+    myObject1.sendMessage("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4");
+    myObject1.setId(scheduler.addVDSO(myObject1));
+    myObject2.setId(scheduler.addVDSO(myObject2));
     
     var temp = 0;
     engine.runRenderLoop(function () {
-        // var deltaTime = scene.getEngine().getDeltaTime();
-        // temp += deltaTime;
-        // if(temp > 5000)
-        // {
-        //     console.log("API call");
-        //     scheduler.pollForSchedule();
-        //     temp = 0;
-        // }
+        var deltaTime = scene.getEngine().getDeltaTime();
+        temp += deltaTime;
+        if(temp > 5000)
+        {
+            console.log("API call");
+            scheduler.getSchedule();
+            temp = 0;
+        }
         scene.render();
     });
 });

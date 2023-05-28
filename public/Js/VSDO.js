@@ -11,6 +11,7 @@ class VirtualSignage {
             sideOrientation: BABYLON.Mesh.DOUBLESIDE,
         };
 
+        this.vdsoId = -1; // Means not listed yet
         this.display = BABYLON.MeshBuilder.CreatePlane("plane", planeOpts, scene);
         var videoMat = new BABYLON.StandardMaterial("m", scene);
         var videoVidTex = new BABYLON.VideoTexture("vidtex", defaultURL, scene);
@@ -49,6 +50,14 @@ class VirtualSignage {
 
     getPosition = () => {
         return this.display.position;
+    }
+
+    setId = (id) => {
+        this.vdsoId = id;
+    }
+
+    getId = (id) => {
+        return this.vdsoId;
     }
 
     sendMessage = (message) => {

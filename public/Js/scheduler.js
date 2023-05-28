@@ -19,48 +19,61 @@ function lowerBound(arr, target) {
 class Scheduler {
     constructor(scheduleURL) {
         this.scheduleURL = scheduleURL;
-        this.vdsos = {};
+        this.vdsos = [];
         this.scheduleOrder = -1; // helps to avoid resending the already sent schedules.
         // Server will send schedule with scheduleOrder, which will change per schedule and group devices
     }
 
-    addVDSO = (name, vdso) => {
-        this.vdso[name] = vdso; // Append vdso
+    addVDSO = (vdso) => {
+        this.vdsos.push({
+            vdso: vdso,
+            url:vdso.display.material.diffuseTexture.video.src,
+        }); // Append vdso
+        return (this.vdsos.length - 1);
     }
 
     getVdsos = () => {
         return this.vdsos;
     }
 
-    pollForSchedule = (scheduleURL = "") => {
-        if (scheduleURL != "") {
-            this.scheduleURL = scheduleURL;
+    getSchedule = (url = "") => {
+        if (url != "") {
+            this.scheduleURL = url;
         }
-        fetch('http://localhost:8000/getAvailableFiles')
-            .then(response => response.json())
-            .then(data => {
-                // Process the fetched data
-                console.log(data);
-                /*
-                scheduleOrder:no,
-                schedule:{
-                    timings:[ordered, array]
-                    urls:{
-                        time: URL // time will be same from timings function
-                    }
-                }
-                devices:[] // list of device IDs
-                */
-                if(data.scheduleOrder != this.scheduleOrder)
-                {
-                    this.scheduleOrder = data.scheduleOrder;
-                }
-                // Else already received schedule
-            })
-            .catch(error => {
-                // Handle any errors that occur during the fetch
-                console.error(error);
-            });
+        axios.get('http://localhost:8000/provideSchedule', {
+            params:{
+                vdsoList:[1,2,3,4]
+            }
+        })
+        .then(response => {
+            console.log(response);
+            console.log(this.vdsos);
+        })
+        // fetch()
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         // Process the fetched data
+        //         console.log(data);
+        //         /*
+        //         scheduleOrder:no,
+        //         schedule:{
+        //             timings:[ordered, array]
+        //             urls:{
+        //                 time: URL // time will be same from timings function
+        //             }
+        //         }
+        //         devices:[] // list of device IDs
+        //         */
+        //         if(data.scheduleOrder != this.scheduleOrder)
+        //         {
+        //             this.scheduleOrder = data.scheduleOrder;
+        //         }
+        //         // Else already received schedule
+        //     })
+        //     .catch(error => {
+        //         // Handle any errors that occur during the fetch
+        //         console.error(error);
+        //     });
     }
 
 }
